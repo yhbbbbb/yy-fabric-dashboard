@@ -7,6 +7,7 @@ import unittest
 from pathlib import Path
 
 from backend import admin_auth, server
+from scripts import build_demo_db
 
 
 class RoutePermissionTests(unittest.TestCase):
@@ -14,6 +15,9 @@ class RoutePermissionTests(unittest.TestCase):
     def setUpClass(cls):
         cls.temp_dir = tempfile.TemporaryDirectory()
         admin_auth.ADMIN_DB_PATH = Path(cls.temp_dir.name) / "admin.sqlite"
+        build_demo_db.DB_PATH = Path(cls.temp_dir.name) / "dashboard.sqlite"
+        build_demo_db.build()
+        server.DB_PATH = build_demo_db.DB_PATH
         os.environ["YY_ADMIN_PASSWORD"] = "TestAdmin@123"
         admin_auth.init_admin_db()
         role = admin_auth.create_role("只看总览", "overview_reader", "", ["overview"])
