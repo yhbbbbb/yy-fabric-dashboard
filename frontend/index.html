@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0096BF" />
+    <title>YY 面料数据串联</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" id="sidebar">
+        <div class="brand">
+          <div class="brand-mark">YY</div>
+          <div class="brand-copy">
+            <strong>唛架数据串联</strong>
+            <span>Fabric Intelligence</span>
+          </div>
+        </div>
+        <nav class="nav" aria-label="主导航">
+          <button class="nav-item active" data-view="overview"><span class="nav-icon">▦</span><span>总览看板</span></button>
+          <button class="nav-item" data-view="chain"><span class="nav-icon">⌘</span><span>链路分析</span></button>
+          <button class="nav-item" data-view="analytics"><span class="nav-icon">◒</span><span>经营分析</span></button>
+          <button class="nav-item" data-view="orders"><span class="nav-icon">☷</span><span>订单查询</span></button>
+          <button class="nav-item" data-view="quality"><span class="nav-icon">△</span><span>数据质量</span></button>
+        </nav>
+        <div class="sidebar-admin-entry" id="admin-entry" hidden>
+          <a class="sidebar-admin-link" href="/admin.html">
+            <span class="nav-icon">⚙</span>
+            <span>平台管理</span>
+          </a>
+        </div>
+        <div class="sidebar-foot">
+          <span class="status-dot"></span>
+          <span>Demo 数据库已连接</span>
+        </div>
+      </aside>
+
+      <main class="main">
+        <header class="topbar">
+          <div class="topbar-main">
+            <button class="icon-btn mobile-menu" id="mobile-menu" aria-label="打开菜单">☰</button>
+            <div class="title-block">
+              <p class="eyebrow">YY FABRIC INTELLIGENCE</p>
+              <h1 id="page-title">总览看板</h1>
+            </div>
+            <div class="topbar-actions">
+              <span class="data-badge"><span class="status-dot"></span> Demo V1</span>
+              <button class="icon-btn" id="refresh" aria-label="刷新数据" title="刷新数据">↻</button>
+            </div>
+          </div>
+          <div class="filters-panel" id="filters-panel">
+            <div class="filter-heading"><button class="text-btn" id="reset-filters">重置</button></div>
+            <div class="filter-grid">
+              <label class="field" data-filter-key="buyer">
+                <span>客户</span>
+                <select id="buyer-filter"><option value="">全部客户</option></select>
+              </label>
+              <label class="field" data-filter-key="fabric_source">
+                <span>面料来源</span>
+                <select id="fabric-filter"><option value="">全部来源</option></select>
+              </label>
+              <label class="field" data-filter-key="chain_state">
+                <span>链路状态</span>
+                <select id="state-filter"><option value="">全部状态</option></select>
+              </label>
+              <label class="field" data-filter-key="factory">
+                <span>工厂</span>
+                <select id="factory-filter"><option value="">全部工厂</option></select>
+              </label>
+              <label class="field" data-filter-key="style">
+                <span>款式</span>
+                <select id="style-filter"><option value="">全部款式</option></select>
+              </label>
+              <label class="field" data-filter-key="garment_feature">
+                <span>Garment Feature</span>
+                <select id="garment-feature-filter"><option value="">全部 Garment Feature</option></select>
+              </label>
+              <label class="field" data-filter-key="creator">
+                <span>Creator</span>
+                <select id="creator-filter"><option value="">全部 Creator</option></select>
+              </label>
+              <label class="field" data-filter-key="creator_dept">
+                <span>创建部门</span>
+                <select id="creator-dept-filter"><option value="">全部部门</option></select>
+              </label>
+              <label class="field date-field" data-filter-key="from">
+                <span>开始日期</span>
+                <input type="text" id="from-filter" class="date-input" placeholder="年/月/日" inputmode="numeric" maxlength="10" aria-label="开始日期，格式：年/月/日" />
+              </label>
+              <label class="field date-field" data-filter-key="to">
+                <span>结束日期</span>
+                <input type="text" id="to-filter" class="date-input" placeholder="年/月/日" inputmode="numeric" maxlength="10" aria-label="结束日期，格式：年/月/日" />
+              </label>
+            </div>
+          </div>
+        </header>
+
+        <section class="content">
+          <section class="view active" id="view-overview">
+            <div class="section-intro">
+              <div>
+                <h2>数据齐全时，先看这些</h2>
+                <p>单阶段指标独立统计；阶段对比仅使用已经串联成功的样本。</p>
+              </div>
+              <span class="updated-at" id="updated-at">正在加载...</span>
+            </div>
+            <div class="metric-grid" id="metric-grid"></div>
+            <div class="notice" id="yy-notice"></div>
+            <div class="dashboard-grid">
+              <article class="panel chart-panel wide trend-panel">
+                <div class="panel-head">
+                  <div><h3>订单与交付趋势</h3><p>QUO/PPO 提交、完成与 Bulk 交付明细</p></div>
+                  <span class="legend"><i class="legend-dot cyan"></i>提交 <i class="legend-dot dark"></i>完成 <i class="legend-dot lime"></i>Bulk 交付</span>
+                </div>
+                  <div class="trend-toolbar">
+                    <span id="trend-window-label">显示全部数据</span>
+                    <div class="trend-controls">
+                      <div class="trend-date-controls" aria-label="趋势日期筛选">
+                        <label class="trend-date-field"><span>开始</span><input id="trend-from-filter" class="date-input" type="text" placeholder="年/月/日" inputmode="numeric" maxlength="10" aria-label="趋势开始日期，格式：年/月/日" /></label>
+                        <label class="trend-date-field"><span>结束</span><input id="trend-to-filter" class="date-input" type="text" placeholder="年/月/日" inputmode="numeric" maxlength="10" aria-label="趋势结束日期，格式：年/月/日" /></label>
+                      </div>
+                      <div class="trend-granularity" role="group" aria-label="趋势时间粒度">
+                        <button class="trend-granularity-btn active" type="button" data-trend-granularity="year">年</button>
+                        <button class="trend-granularity-btn" type="button" data-trend-granularity="month">月</button>
+                        <button class="trend-granularity-btn" type="button" data-trend-granularity="day">日</button>
+                      </div>
+                      <div class="trend-nav" role="group" aria-label="趋势缩放与移动">
+                        <button class="icon-btn" id="trend-zoom-in" type="button" aria-label="放大趋势" title="放大">+</button>
+                        <button class="icon-btn" id="trend-zoom-out" type="button" aria-label="缩小趋势" title="缩小">-</button>
+                        <button class="icon-btn" id="trend-pan-left" type="button" aria-label="向左移动趋势" title="向左移动">&lt;</button>
+                        <button class="icon-btn" id="trend-pan-right" type="button" aria-label="向右移动趋势" title="向右移动">&gt;</button>
+                      </div>
+                    </div>
+                  </div>
+                <div class="chart-area line-chart-area" id="trend-chart"></div>
+              </article>
+              <article class="panel">
+                <div class="panel-head"><div><h3>高 YY 款式</h3><p>按 Bulk Marker YY 识别高用量款式</p></div><button class="text-btn" data-go-view="analytics">查看分析</button></div>
+                <div class="ranking-list" id="style-ranking"></div>
+              </article>
+              <article class="panel drill-panel customer-drill-panel" data-analytics-target="customer" role="button" tabindex="0" aria-label="查看客户经营分析">
+                <div class="panel-head"><div><h3>客户订单量</h3><p>Bulk Garment Order 去重</p></div><div class="chart-toggle" aria-label="客户订单量显示方式"><button class="chart-toggle-btn" data-customer-view="bar" type="button">条形</button><button class="chart-toggle-btn active" data-customer-view="donut" type="button">圆环</button></div></div>
+                <div class="ranking-list" id="buyer-ranking"></div>
+              </article>
+              <article class="panel drill-panel" data-analytics-target="factory" role="button" tabindex="0" aria-label="查看工厂经营分析">
+                <div class="panel-head"><div><h3>工厂 PPO 数量</h3><p>独立阶段统计，不受 Full chain 限制</p></div></div>
+                <div class="ranking-list" id="factory-ranking"></div>
+              </article>
+            </div>
+          </section>
+
+          <section class="view" id="view-analytics">
+            <div class="section-intro">
+              <div><h2>经营分析</h2><p>从客户、效率、YY 差异和损耗四个方向辅助业务判断。</p></div>
+              <span class="updated-at">指标基于当前筛选范围</span>
+            </div>
+            <div class="metric-grid analytics-metrics" id="analytics-metrics"></div>
+            <div class="dashboard-grid analytics-grid">
+              <article class="panel analytics-full" id="customer-analysis-panel">
+                <div class="panel-head"><div><h3>客户经营排行</h3><p>订单数、订单件数、成交率、回购率、YY 节省/超耗和损耗码数</p></div></div>
+                <div class="table-wrap customer-table-wrap">
+                  <table>
+                    <thead><tr><th>客户</th><th>订单数</th><th>订单件数</th><th>成交率</th><th>回购率</th><th>YY 节省/超耗</th><th>估算节省码数</th><th>损耗码数</th></tr></thead>
+                    <tbody id="customer-analytics-body"></tbody>
+                  </table>
+                </div>
+              </article>
+              <article class="panel analytics-half" id="yy-stage-panel">
+                <div class="panel-head"><div><h3>三阶段 YY 对比</h3><p>Full chain 严格样本</p></div></div>
+                <div class="yy-stage-list" id="yy-stage-list"></div>
+              </article>
+              <article class="panel analytics-half" id="duration-panel">
+                <div class="panel-head"><div><h3>阶段完成时长</h3><p>提交至完成，单位：小时</p></div></div>
+                <div class="duration-grid" id="duration-grid"></div>
+              </article>
+              <article class="panel analytics-half" id="entity-analysis-panel">
+                <div class="panel-head"><div><h3>工厂 / 部门 / Creator 排名</h3><p>按 Workflow 数、平均完成时长和平均 YY 查看</p></div></div>
+                <div class="ranking-tabs" id="entity-ranking-tabs">
+                  <button class="tab-btn active" data-rank="factory">工厂</button>
+                  <button class="tab-btn" data-rank="creator_dept">部门</button>
+                  <button class="tab-btn" data-rank="creator">Creator</button>
+                </div>
+                <div class="entity-ranking" id="entity-ranking"></div>
+              </article>
+              <article class="panel analytics-half table-panel">
+                <div class="panel-head"><div><h3>超时 Workflow 清单</h3><p>默认超过 48 小时，可按阶段筛选</p></div><span class="muted-tag">可导出接口预留</span></div>
+                <div class="table-wrap"><table><thead><tr><th>WorkflowNo</th><th>阶段</th><th>客户</th><th>工厂</th><th>Creator</th><th>款式</th><th>完成时长</th></tr></thead><tbody id="timeout-body"></tbody></table></div>
+              </article>
+              <article class="panel analytics-full">
+                <div class="panel-head"><div><h3>指标口径说明</h3><p>当前页面所有派生指标的计算方式</p></div></div>
+                <div class="definition-list" id="definition-list"></div>
+              </article>
+              <article class="panel analytics-half">
+                <div class="panel-head"><div><h3>阶段接收 / 完成量</h3><p>只展示有效入库记录</p></div></div>
+                <div class="volume-list" id="volume-summary"></div>
+              </article>
+              <article class="panel analytics-half">
+                <div class="panel-head"><div><h3>有效数据样本</h3><p>异常和空白记录转入数据质量</p></div></div>
+                <div class="validity-list" id="validity-summary"></div>
+              </article>
+            </div>
+          </section>
+
+          <section class="view" id="view-chain">
+            <div class="section-intro">
+              <div><h2>链路分析</h2><p>查看 Bulk → PPO → QUO 的实际可追溯范围和阶段对比入口。</p></div>
+            </div>
+            <div class="analysis-grid">
+              <article class="panel">
+                <div class="panel-head"><div><h3>Bulk → PPO</h3><p>可辅助订布与大货用量复核</p></div></div>
+                <div class="big-number" id="chain-bulk-rate">--</div>
+                <div class="progress"><span id="chain-bulk-progress"></span></div>
+                <p class="metric-caption">已找到 PPO 的 Bulk 订单</p>
+                <div class="mini-stats"><span><b id="chain-bulk-count">--</b> 匹配订单</span><span><b id="chain-total-count">--</b> 分析订单</span></div>
+              </article>
+              <article class="panel">
+                <div class="panel-head"><div><h3>严格 Full chain</h3><p>仅代表已有完整链路的分析样本</p></div></div>
+                <div class="big-number" id="chain-full-rate">--</div>
+                <div class="progress"><span class="progress-dark" id="chain-full-progress"></span></div>
+                <p class="metric-caption">Bulk → PPO → QUO</p>
+                <div class="mini-stats"><span><b id="chain-full-count">--</b> Full chain</span><span>不作为成功率目标</span></div>
+              </article>
+            </div>
+            <div class="dashboard-grid chain-lower">
+              <article class="panel wide">
+                <div class="panel-head"><div><h3>阶段差异</h3><p>需要 YY 数值字段后启用</p></div></div>
+                <div class="empty-state compact"><span class="empty-icon">↕</span><strong>指标接口已预留</strong><p>接入 QUO YY、PPO YY、Bulk Marker YY 后展示阶段差异排名。</p></div>
+              </article>
+            </div>
+          </section>
+
+          <section class="view" id="view-orders">
+            <div class="section-intro">
+              <div><h2>订单查询</h2><p>按 Garment Order 查询 Bulk 订单和已有链路。</p></div>
+              <div class="search-box"><span>⌕</span><input id="order-search" placeholder="搜索 Garment Order、客户或 WorkflowNo" /></div>
+            </div>
+            <article class="panel table-panel">
+              <div class="panel-head"><div><h3>Bulk 订单明细</h3><p id="order-count">--</p></div><button class="text-btn" id="load-orders">刷新列表</button></div>
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>Garment Order</th><th>客户</th><th>Delivery Date</th><th>面料来源</th><th>链路状态</th><th>QUO Marker YY</th><th>PPO Marker YY</th><th>Bulk Marker YY</th><th>QUO-PPO</th><th>PPO-Bulk</th><th>QUO-Bulk</th><th>操作</th></tr></thead>
+                  <tbody id="orders-body"></tbody>
+                </table>
+              </div>
+              <div class="pagination"><button class="icon-btn" id="prev-page">‹</button><span id="page-info">1 / 1</span><button class="icon-btn" id="next-page">›</button></div>
+            </article>
+          </section>
+
+          <section class="view" id="view-quality">
+            <div class="section-intro">
+              <div><h2>数据质量</h2><p>异常记录保留在标准库中，但不进入对应指标的有效分母。</p></div>
+            </div>
+            <div class="dashboard-grid quality-grid">
+              <article class="panel quality-summary-panel">
+                <div class="panel-head"><div><h3>质量问题汇总</h3><p>当前数据库批次</p></div></div>
+                <div class="quality-cards" id="quality-summary"></div>
+              </article>
+              <article class="panel quality-state-panel">
+                <div class="panel-head"><div><h3>链路状态看板</h3><p>订单级状态统计，异常链路仅保留在数据质量和订单查询中</p></div></div>
+                <div class="state-list" id="quality-chain-state-list"></div>
+              </article>
+              <article class="panel quality-table-panel table-panel">
+                <div class="panel-head"><div><h3>最近异常记录</h3><p>支持业务核验和后续清洗规则补充</p></div></div>
+                <div class="table-wrap"><table><thead><tr><th>对象</th><th>单号</th><th>问题</th><th>级别</th><th>字段</th><th>原值</th><th>说明</th><th>建议</th></tr></thead><tbody id="quality-body"></tbody></table></div>
+              </article>
+            </div>
+          </section>
+        </section>
+      </main>
+    </div>
+
+    <div class="drawer-backdrop" id="drawer-backdrop"></div>
+    <aside class="drawer" id="chain-drawer">
+      <div class="drawer-head">
+        <div><span class="eyebrow">ORDER TRACE</span><h2 id="drawer-title">订单追溯</h2></div>
+        <div class="drawer-actions">
+          <button class="drawer-back-btn" id="drawer-back" type="button" aria-label="返回订单列表">‹ 返回订单</button>
+          <button class="icon-btn" id="drawer-close" type="button" aria-label="关闭链路信息">×</button>
+        </div>
+      </div>
+      <div id="drawer-content"></div>
+    </aside>
+    <div class="loading-overlay" id="loading-overlay" aria-live="polite" aria-busy="false" hidden>
+      <div class="loading-indicator"><span class="spinner" aria-hidden="true"></span><span>正在加载数据...</span></div>
+    </div>
+    <script src="/app.js"></script>
+  </body>
+</html>

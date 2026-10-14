@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0096BF" />
+    <title>YY 面料数据串联 · 登录</title>
+    <link rel="stylesheet" href="/login.css" />
+  </head>
+  <body>
+    <main class="login-shell">
+      <section class="login-card">
+        <div class="brand-mark">YY</div>
+        <p class="eyebrow">FABRIC INTELLIGENCE</p>
+        <h1>登录数据平台</h1>
+        <p class="muted">请输入平台账号继续访问。</p>
+        <form id="login-form">
+          <label>用户名<input id="username" autocomplete="username" required /></label>
+          <label>密码<input id="password" type="password" autocomplete="current-password" required /></label>
+          <button type="submit">登录</button>
+          <p id="error" class="error" role="alert"></p>
+        </form>
+      </section>
+    </main>
+    <script src="/login.js"></script>
+  </body>
+</html>

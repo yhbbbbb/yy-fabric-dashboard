@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0096BF" />
+    <title>YY 面料数据串联 · 平台管理</title>
+    <link rel="stylesheet" href="/admin.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">YY FABRIC INTELLIGENCE</p>
+        <h1>平台管理</h1>
+      </div>
+      <div class="top-actions">
+        <span id="current-user"></span>
+        <a class="ghost" href="/">返回看板</a>
+        <button id="logout" class="ghost" type="button">退出登录</button>
+      </div>
+    </header>
+    <main class="admin-shell">
+      <section class="stats" id="stats"></section>
+      <section class="panel">
+        <div class="panel-heading">
+          <div><p class="eyebrow">ACCESS CONTROL</p><h2>用户管理</h2></div>
+          <button id="new-user" type="button">新增用户</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>用户</th><th>角色</th><th>实际页面权限</th><th>状态</th><th>最近登录</th><th></th></tr></thead>
+            <tbody id="users"></tbody>
+          </table>
+        </div>
+      </section>
+      <section class="panel">
+        <div class="panel-heading">
+          <div><p class="eyebrow">ROLE BUILDER</p><h2>角色管理</h2></div>
+          <button id="new-role" type="button">新增角色</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>角色</th><th>编码</th><th>页面权限</th><th>绑定用户</th><th>状态</th><th></th></tr></thead>
+            <tbody id="roles"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+    <dialog id="user-dialog">
+      <form id="user-form">
+        <div class="dialog-heading"><h2 id="user-dialog-title">新增用户</h2><button type="button" class="icon-button" data-close="user-dialog" aria-label="关闭">×</button></div>
+        <input type="hidden" id="user-id" />
+        <label>用户名<input id="user-name" required maxlength="80" /></label>
+        <label>密码<input id="user-password" type="password" minlength="8" placeholder="新增用户必填，编辑时留空表示不修改" /></label>
+        <fieldset><legend>分配角色</legend><div id="role-list" class="permission-grid"></div></fieldset>
+        <label class="check"><input type="checkbox" id="user-active" checked /> 启用账号</label>
+        <p id="user-error" class="error"></p>
+        <div class="dialog-actions"><button type="button" class="ghost" data-close="user-dialog">取消</button><button type="submit">保存</button></div>
+      </form>
+    </dialog>
+    <dialog id="role-dialog">
+      <form id="role-form">
+        <div class="dialog-heading"><h2 id="role-dialog-title">新增角色</h2><button type="button" class="icon-button" data-close="role-dialog" aria-label="关闭">×</button></div>
+        <input type="hidden" id="role-id" />
+        <label>角色名称<input id="role-name" required maxlength="80" /></label>
+        <label>角色编码<input id="role-code" required maxlength="49" pattern="[a-z][a-z0-9_]{1,48}" /></label>
+        <label>角色说明<textarea id="role-description" rows="3"></textarea></label>
+        <fieldset><legend>允许访问的页面</legend><div id="permission-list" class="permission-grid"></div></fieldset>
+        <label class="check"><input type="checkbox" id="role-active" checked /> 启用角色</label>
+        <p id="role-error" class="error"></p>
+        <div class="dialog-actions"><button type="button" class="ghost" data-close="role-dialog">取消</button><button type="submit">保存</button></div>
+      </form>
+    </dialog>
+    <script src="/admin.js"></script>
+  </body>
+</html>

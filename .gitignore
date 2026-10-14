@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+*.log
+*.csv
+*.xlsx
+*.xls
+*.pkl
+*.jpg
+*.png
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+data/*
+!data/.gitkeep
+output/
+raw_data/
