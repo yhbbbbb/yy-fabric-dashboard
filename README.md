@@ -1,5 +1,7 @@
 # YY Fabric Intelligence Dashboard
 
+[中文说明](README.zh-CN.md)
+
 This repository is a sanitized portfolio demo for a fabric-usage traceability dashboard.
 It contains application code and synthetic data generation only. It does not contain
 company source files, customer data, factory data, order data, or production databases.
